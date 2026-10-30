@@ -2,6 +2,9 @@ const state = {
   services: [],
   offers: [],
   notifications: [],
+  profile: null,
+  reviews: [],
+  stats: {}
 };
 
 const productList = document.getElementById('productList');
@@ -13,6 +16,9 @@ const closeNotification = document.getElementById('closeNotification');
 const searchInput = document.getElementById('searchInput');
 const toast = document.getElementById('toast');
 const notificationCount = document.getElementById('notificationCount');
+const statsGrid = document.getElementById('statsGrid');
+const reviewsList = document.getElementById('reviewsList');
+const profileCard = document.getElementById('profileCard');
 
 function showToast(message) {
   toast.textContent = message;
@@ -23,8 +29,24 @@ function showToast(message) {
 }
 
 function createStars(rating) {
-  const stars = '★'.repeat(Math.round(rating));
-  return `<span class="stars">${stars}</span>`;
+  return `<span class="stars">${'★'.repeat(Math.round(rating))}</span>`;
+}
+
+function renderStats(stats) {
+  const items = [
+    { icon: '🛍️', label: 'طلبات', value: stats.orders || 0 },
+    { icon: '⭐', label: 'تقييم', value: `${stats.rating || 0}` },
+    { icon: '❤', label: 'مفضلة', value: stats.favorites || 0 },
+    { icon: '🚚', label: 'توصيل', value: stats.delivery || '20 د' }
+  ];
+
+  statsGrid.innerHTML = items.map((item) => `
+    <div class="stat-card">
+      <span>${item.icon}</span>
+      <strong>${item.value}</strong>
+      <small>${item.label}</small>
+    </div>
+  `).join('');
 }
 
 function renderOffers(data) {
@@ -58,6 +80,7 @@ function renderProducts(items) {
         <div class="product-actions">
           <button class="add-btn" data-name="${item.name}" data-price="${item.price}">أضف</button>
           <button class="review-btn" data-name="${item.name}">تقييم</button>
+          <button class="favorite-btn" data-name="${item.name}">♡</button>
         </div>
       </div>
     </article>
@@ -66,15 +89,12 @@ function renderProducts(items) {
   document.querySelectorAll('.add-btn').forEach((button) => {
     button.addEventListener('click', async () => {
       const itemName = button.dataset.name;
-      const quantity = 1;
-
       try {
         const response = await fetch('/api/order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ itemName, quantity, notes: 'بدون إضافات' })
+          body: JSON.stringify({ itemName, quantity: 1, notes: 'بدون إضافات' })
         });
-
         const result = await response.json();
         showToast(result.message || 'تمت الإضافة إلى الطلب');
       } catch (error) {
@@ -99,6 +119,13 @@ function renderProducts(items) {
       }
     });
   });
+
+  document.querySelectorAll('.favorite-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const itemName = button.dataset.name;
+      showToast(`${itemName} أضيف إلى المفضلة`);
+    });
+  });
 }
 
 function renderNotifications(list) {
@@ -113,25 +140,69 @@ function renderNotifications(list) {
   notificationCount.textContent = list.length;
 }
 
+function renderReviews(list) {
+  reviewsList.innerHTML = list.map((review) => `
+    <article class="review-item">
+      <div class="review-header">
+        <strong>${review.user}</strong>
+        <span>${createStars(review.rating)}</span>
+      </div>
+      <p><strong>${review.item}</strong> - ${review.text}</p>
+    </article>
+  `).join('');
+}
+
+function renderProfile(profile) {
+  profileCard.innerHTML = `
+    <div class="profile-top">
+      <div class="profile-avatar">${profile.name.charAt(0)}</div>
+      <div class="profile-meta">
+        <h4>${profile.name}</h4>
+        <small>عضو منذ ${profile.memberSince}</small>
+      </div>
+    </div>
+
+    <div class="profile-points">
+      <div>
+        <small>نقاطك</small>
+        <div class="points-box">${profile.points}</div>
+      </div>
+      <div>
+        <small>المفضلة</small>
+        <div class="points-box">${profile.favorite}</div>
+      </div>
+    </div>
+
+    <div class="profile-detail">
+      <div>📍 ${profile.address}</div>
+      <div>📞 ${profile.phone}</div>
+      <div>🚚 ${profile.deliveryStatus}</div>
+    </div>
+  `;
+}
+
 async function loadData() {
   try {
-    const [servicesRes, offersRes, notificationsRes] = await Promise.all([
-      fetch('/api/services'),
-      fetch('/api/offers'),
-      fetch('/api/notifications')
-    ]);
+    const response = await fetch('/api/home');
+    const result = await response.json();
+    const { data } = result;
 
-    const servicesData = await servicesRes.json();
-    const offersData = await offersRes.json();
-    const notificationsData = await notificationsRes.json();
+    state.services = data.featured;
+    state.offers = data.offers;
+    state.notifications = data.notifications;
+    state.profile = data.profile;
+    state.reviews = data.recentReviews;
+    state.stats = data.stats;
 
-    state.services = servicesData.data;
-    state.offers = offersData.data;
-    state.notifications = notificationsData.data;
-
+    renderStats(state.stats);
     renderProducts(state.services);
     renderOffers(state.offers);
     renderNotifications(state.notifications);
+    renderReviews(state.reviews);
+    renderProfile(state.profile);
+
+    const firstDish = state.services[0]?.name || 'بوظة الممكلة';
+    document.getElementById('featuredDishName').textContent = firstDish;
   } catch (error) {
     showToast('تعذر تحميل التطبيق. حاول لاحقًا.');
   }
@@ -146,8 +217,7 @@ searchInput.addEventListener('input', (event) => {
   }
 
   const filtered = state.services.filter((item) =>
-    item.name.toLowerCase().includes(query) ||
-    item.category.toLowerCase().includes(query)
+    item.name.toLowerCase().includes(query) || item.category.toLowerCase().includes(query)
   );
 
   renderProducts(filtered);

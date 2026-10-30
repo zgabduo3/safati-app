@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const services = [
+const featured = [
   {
     id: 1,
     name: 'بوظة الممكلة',
@@ -14,9 +14,9 @@ const services = [
     reviews: 128,
     badge: 'الأكثر طلبًا',
     image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80',
-    description: 'مزيج فاخـر من الحليب والسكر والمهلبية مع لمسة عربية كلاسيكية.',
+    description: 'مزيج فاخر من الحليب والسكر والمهلبية مع لمسة عربية كلاسيكية.',
     prepTime: '15 دقيقة',
-    spicyLevel: 'خفيف'
+    popular: true
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ const services = [
     image: 'https://images.unsplash.com/photo-1559620192-032c4bc4674e?auto=format&fit=crop&w=900&q=80',
     description: 'كيكة ناعمة بقاعدة الكراميل وت topping من التوت الطازج.',
     prepTime: '20 دقيقة',
-    spicyLevel: 'ممتاز'
+    popular: true
   },
   {
     id: 3,
@@ -42,11 +42,11 @@ const services = [
     image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=80',
     description: 'حلوى هشة مع مزيج من البندق والمكسرات والكاكاو.',
     prepTime: '12 دقيقة',
-    spicyLevel: 'مناسب للجميع'
+    popular: false
   },
   {
     id: 4,
-    name: 'بسبوسة ا��موز',
+    name: 'بسبوسة الموز',
     category: 'مخبوزات',
     price: 52,
     rating: 4.9,
@@ -55,61 +55,93 @@ const services = [
     image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80',
     description: 'بسبوسة طرية مع قوام ناعم ونكهة الموز الحلوة.',
     prepTime: '18 دقيقة',
-    spicyLevel: 'لطيف'
+    popular: true
+  },
+  {
+    id: 5,
+    name: 'تورتة الشوكولاتة',
+    category: 'كيكات',
+    price: 68,
+    rating: 4.9,
+    reviews: 166,
+    badge: 'محبوبة',
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=80',
+    description: 'تورتة دافئة بنكهة الشوكولاتة الغنية مع طبقة ك��يمة ناعمة.',
+    prepTime: '25 دقيقة',
+    popular: true
+  },
+  {
+    id: 6,
+    name: 'كريب الفانيلا',
+    category: 'حلويات ساخنة',
+    price: 33,
+    rating: 4.6,
+    reviews: 48,
+    badge: 'خيار سريع',
+    image: 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=900&q=80',
+    description: 'كريب ناعم مع كريمة الفانيلا واللوز مع رشة قرفة.',
+    prepTime: '10 دقيقة',
+    popular: false
   }
 ];
 
 const offers = [
-  {
-    id: 1,
-    title: 'عرض العائلة',
-    text: 'خصم 25% على طلب 4 قطع أو أكثر',
-    accent: 'pink'
-  },
-  {
-    id: 2,
-    title: 'مميز اليوم',
-    text: 'شحن مجاني داخل المدينة',
-    accent: 'gold'
-  },
-  {
-    id: 3,
-    title: 'تقييمات مميزة',
-    text: 'أكثر من 5,000 عميل راضٍ',
-    accent: 'purple'
-  }
+  { id: 1, title: 'عرض العائلة', text: 'خصم 25% على طلب 4 قطع أو أكثر', accent: 'pink' },
+  { id: 2, title: 'مميز اليوم', text: 'شحن مجاني داخل المدينة', accent: 'gold' },
+  { id: 3, title: 'تقييمات مميزة', text: 'أكثر من 5,000 عميل راضٍ', accent: 'purple' }
 ];
 
 const notifications = [
-  {
-    id: 1,
-    title: 'تم تجهيز طلبك',
-    detail: 'الطلب رقم 2045 جاهز للتسليم خلال 20 دقيقة.',
-    time: 'منذ 5 دقائق'
-  },
-  {
-    id: 2,
-    title: 'عرض خاص لك',
-    detail: 'خصم إضافي 15% على الكيكة اليوم.',
-    time: 'منذ 25 دقيقة'
-  },
-  {
-    id: 3,
-    title: 'تم إضافة تقييم جديد',
-    detail: 'تم تقييم منتج كيك التوت بـ 5 نجوم.',
-    time: 'منذ ساعة'
-  }
+  { id: 1, title: 'تم تجهيز طلبك', detail: 'الطلب رقم 2045 جاهز للتسليم خلال 20 دقيقة.', time: 'منذ 5 دقائق' },
+  { id: 2, title: 'عرض خاص لك', detail: 'خصم إضافي 15% على الكيكة اليوم.', time: 'منذ 25 دقيقة' },
+  { id: 3, title: 'تم إضافة تقييم جديد', detail: 'تم تقييم منتج ك��ك التوت بـ 5 نجوم.', time: 'منذ ساعة' }
 ];
+
+const profile = {
+  name: 'سارة الميموني',
+  points: 1200,
+  favorite: 'بوظة الممكلة',
+  phone: '+966 5xx xxx xxx',
+  address: 'الرياض، حي النخيل',
+  deliveryStatus: 'توصيل سريع',
+  memberSince: 'يناير 2024'
+};
+
+const recentReviews = [
+  { id: 1, user: 'أحمد', item: 'بوظة الممكلة', rating: 5, text: 'مذاق ممتاز وقوام رائع.' },
+  { id: 2, user: 'ريم', item: 'كيكة التوت', rating: 5, text: 'التقديم جميل جدًا والذوق رائع.' },
+  { id: 3, user: 'سلمان', item: 'تورتة الشوكولاتة', rating: 4, text: 'الشوكولاتة غنية جدًا.' }
+];
+
+const quickStats = {
+  orders: 18,
+  rating: 4.9,
+  favorites: 9,
+  delivery: '20 دقيقة'
+};
+
+const appData = {
+  featured,
+  offers,
+  notifications,
+  profile,
+  recentReviews,
+  stats: quickStats
+};
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/api/services', (req, res) => {
-  res.json({ success: true, data: services });
+app.get('/api/home', (req, res) => {
+  res.json({ success: true, data: appData });
 });
 
-app.get('/api/offers', (req, res) => {
-  res.json({ success: true, data: offers });
+app.get('/api/profile', (req, res) => {
+  res.json({ success: true, data: profile });
+});
+
+app.get('/api/reviews', (req, res) => {
+  res.json({ success: true, data: recentReviews });
 });
 
 app.get('/api/notifications', (req, res) => {
@@ -130,7 +162,8 @@ app.post('/api/order', (req, res) => {
       itemName,
       quantity,
       notes: notes || 'بدون ملاحظات',
-      orderId: Math.floor(1000 + Math.random() * 9000)
+      orderId: Math.floor(1000 + Math.random() * 9000),
+      total: Number(quantity) * 45
     }
   });
 });

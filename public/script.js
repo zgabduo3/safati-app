@@ -1,9 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 :root {
   --bg: #fff7f3;
   --panel: #fffdfd;
@@ -13,9 +7,16 @@
   --gold: #ffbf69;
   --text: #2d1b1a;
   --muted: #7d5a56;
-  --stroke: #f8d9d5;
+  --stroke: #f7d9d5;
   --green: #34b27c;
   --shadow: 0 18px 40px rgba(186, 90, 90, 0.12);
+  --soft: #fff4f1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -34,11 +35,14 @@ input {
   font: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
 .app-shell {
   width: min(100%, 460px);
   margin: 0 auto;
   min-height: 100vh;
-  background: transparent;
   position: relative;
   padding: 22px 18px 110px;
 }
@@ -70,12 +74,12 @@ input {
 }
 
 .brand-subtitle {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--muted);
 }
 
 .brand-wrap h1 {
-  font-size: 1.8rem;
+  font-size: 1.85rem;
   line-height: 1.1;
 }
 
@@ -87,7 +91,6 @@ input {
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.8);
   box-shadow: var(--shadow);
-  cursor: pointer;
 }
 
 #notificationCount {
@@ -161,7 +164,6 @@ input {
   border-radius: 14px;
   padding: 12px 18px;
   font-weight: 700;
-  cursor: pointer;
 }
 
 .primary-btn {
@@ -202,7 +204,6 @@ input {
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
 }
 
 .cake-badge {
@@ -236,6 +237,37 @@ input {
   color: var(--text);
 }
 
+.stats-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: 0 10px 18px rgba(225, 147, 125, 0.08);
+}
+
+.stat-card span {
+  display: block;
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.stat-card small {
+  color: var(--muted);
+}
+
 .search-panel {
   margin-top: 22px;
 }
@@ -248,7 +280,6 @@ input {
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
 }
 
 .search-box input {
@@ -261,7 +292,9 @@ input {
 }
 
 .offers-section,
-.products-section {
+.products-section,
+.reviews-section,
+.profile-section {
   margin-top: 24px;
 }
 
@@ -300,17 +333,9 @@ input {
   box-shadow: 0 10px 20px rgba(206, 113, 97, 0.08);
 }
 
-.offer-card.pink {
-  background: linear-gradient(135deg, #fff2f5, #ffe4ef);
-}
-
-.offer-card.gold {
-  background: linear-gradient(135deg, #fffaf0, #ffe9c4);
-}
-
-.offer-card.purple {
-  background: linear-gradient(135deg, #f6f0ff, #e9e1ff);
-}
+.offer-card.pink { background: linear-gradient(135deg, #fff2f5, #ffe4ef); }
+.offer-card.gold { background: linear-gradient(135deg, #fffaf0, #ffe9c4); }
+.offer-card.purple { background: linear-gradient(135deg, #f6f0ff, #e9e1ff); }
 
 .offer-card h4 {
   font-size: 0.9rem;
@@ -342,13 +367,12 @@ input {
   color: var(--muted);
   border-radius: 999px;
   padding: 10px 16px;
-  cursor: pointer;
+  border: none;
 }
 
 .chip.active {
   background: linear-gradient(135deg, var(--primary), #ff8d79);
   color: white;
-  border-color: transparent;
 }
 
 .product-grid {
@@ -391,8 +415,8 @@ input {
 .product-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .product-title {
@@ -414,6 +438,11 @@ input {
   font-size: 0.78rem;
 }
 
+.stars {
+  color: #ffb347;
+  letter-spacing: 1.5px;
+}
+
 .product-actions {
   margin-top: 12px;
   display: flex;
@@ -421,13 +450,13 @@ input {
 }
 
 .add-btn,
-.review-btn {
+.review-btn,
+.favorite-btn {
   flex: 1;
   border: none;
   border-radius: 12px;
   padding: 10px 8px;
   font-weight: 700;
-  cursor: pointer;
 }
 
 .add-btn {
@@ -440,40 +469,97 @@ input {
   color: var(--primary-dark);
 }
 
-.info-panel {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.favorite-btn {
+  background: #fff8e8;
+  color: #b67800;
 }
 
-.mini-card {
+.reviews-list {
+  display: grid;
+  gap: 10px;
+}
+
+.review-item {
   background: white;
   border: 1px solid var(--stroke);
   border-radius: 18px;
-  padding: 14px 12px;
+  padding: 12px 14px;
+  box-shadow: 0 10px 18px rgba(233, 138, 117, 0.06);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.review-item strong {
+  font-size: 0.92rem;
+}
+
+.review-item p {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #fff5f6, #fffef8);
+  border: 1px solid var(--stroke);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 16px 22px rgba(233, 138, 117, 0.06);
+}
+
+.profile-top {
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 14px 22px rgba(233, 138, 117, 0.08);
+  gap: 12px;
 }
 
-.mini-card.accent {
-  background: linear-gradient(135deg, #fff2df, #fffaf4);
+.profile-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ff8ea2, #ffc796);
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: white;
 }
 
-.mini-card span {
-  font-size: 1.5rem;
+.profile-meta h4 {
+  font-size: 1rem;
 }
 
-.mini-card strong,
-.mini-card small {
-  display: block;
-}
-
-.mini-card small {
+.profile-meta small {
   color: var(--muted);
-  margin-top: 2px;
+}
+
+.profile-points {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.points-box {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.profile-detail {
+  margin-top: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 0.85rem;
 }
 
 .notification-panel {
@@ -506,7 +592,6 @@ input {
   border-radius: 12px;
   width: 36px;
   height: 36px;
-  cursor: pointer;
 }
 
 .notification-list {
@@ -560,7 +645,6 @@ input {
   border-radius: 18px;
   padding: 10px 0;
   font-size: 1.5rem;
-  cursor: pointer;
 }
 
 .nav-item.active {
@@ -579,7 +663,7 @@ input {
   border-radius: 999px;
   font-size: 0.82rem;
   transition: all 0.25s ease;
-  z-index: 20;
+  z-index: 30;
 }
 
 .toast.show {

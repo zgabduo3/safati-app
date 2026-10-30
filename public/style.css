@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>صفاتي | خدمات الحلويات</title>
-    <meta name="description" content="تطبيق عربي عصري لخدمات الحلويات، التقييمات، الطلبات، والإشعارات." />
+    <meta name="description" content="تجربة عربية حديثة لخدمات الحلويات مع تقييمات، إشعارات، منتج مميز، وواجهة خفيفة." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -20,9 +20,10 @@
             <h1>صفاتي</h1>
           </div>
         </div>
+
         <button class="icon-btn" id="notifyButton" aria-label="الإشعارات">
           🔔
-          <span id="notificationCount">3</span>
+          <span id="notificationCount">0</span>
         </button>
       </header>
 
@@ -31,23 +32,27 @@
           <div class="hero-text">
             <span class="pill">توصيل سريع</span>
             <h2>حلويات عربية فاخرة من ذوقك</h2>
-            <p>استمتع بتجربة تسليم أنيقة وممتعة مع أفضل المذاقات وأرخص الأسعار.</p>
+            <p>استمتع بتجربة طلب أنيقة، مميزة، وسريعة مع أقوى المذاقات وأحدث الوجبات المنزلية.</p>
+
             <div class="hero-actions">
               <button class="primary-btn" id="exploreBtn">تصفح الآن</button>
-              <button class="secondary-btn">حجز سريـع</button>
+              <button class="secondary-btn">حجز سريع</button>
             </div>
           </div>
+
           <div class="hero-visual">
             <div class="cake-card">
               <div class="cake-badge">مميز</div>
               <div class="cake-illustration">🍰</div>
               <div class="cake-meta">
-                <strong>بوظة الممكلة</strong>
+                <strong id="featuredDishName">بوظة الممكلة</strong>
                 <span>⭐ 4.9</span>
               </div>
             </div>
           </div>
         </section>
+
+        <section class="stats-grid" id="statsGrid"></section>
 
         <section class="search-panel">
           <div class="search-box">
@@ -79,21 +84,20 @@
           <div id="productList" class="product-grid"></div>
         </section>
 
-        <section class="info-panel">
-          <div class="mini-card">
-            <span>🚚</span>
-            <div>
-              <strong>توصيل سريع</strong>
-              <small>خلال 20 دقيقة</small>
-            </div>
+        <section class="reviews-section">
+          <div class="section-heading">
+            <h3>آراء العملاء</h3>
+            <a href="#">مشاهدة الكل</a>
           </div>
-          <div class="mini-card accent">
-            <span>⭐</span>
-            <div>
-              <strong>تقييمات عالية</strong>
-              <small>4.9 من 5</small>
-            </div>
+          <div id="reviewsList" class="reviews-list"></div>
+        </section>
+
+        <section class="profile-section">
+          <div class="section-heading">
+            <h3>ملفي الشخصي</h3>
+            <a href="#">تحديث</a>
           </div>
+          <div id="profileCard" class="profile-card"></div>
         </section>
       </main>
 
