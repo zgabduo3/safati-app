@@ -3,6 +3,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.locals.currentUser = null;
 
 const featured = [
   {
@@ -66,7 +67,7 @@ const featured = [
     reviews: 166,
     badge: 'محبوبة',
     image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=80',
-    description: 'تورتة دافئة بنكهة الشوكولاتة الغنية مع طبقة ك��يمة ناعمة.',
+    description: 'تورتة دافئة بنكهة الشوكولاتة الغنية مع طبقة كريمة ناعمة.',
     prepTime: '25 دقيقة',
     popular: true
   },
@@ -94,7 +95,7 @@ const offers = [
 const notifications = [
   { id: 1, title: 'تم تجهيز طلبك', detail: 'الطلب رقم 2045 جاهز للتسليم خلال 20 دقيقة.', time: 'منذ 5 دقائق' },
   { id: 2, title: 'عرض خاص لك', detail: 'خصم إضافي 15% على الكيكة اليوم.', time: 'منذ 25 دقيقة' },
-  { id: 3, title: 'تم إضافة تقييم جديد', detail: 'تم تقييم منتج ك��ك التوت بـ 5 نجوم.', time: 'منذ ساعة' }
+  { id: 3, title: 'تم إضافة تقييم جديد', detail: 'تم تقييم منتج كيك التوت بـ 5 نجوم.', time: 'منذ ساعة' }
 ];
 
 const profile = {
@@ -120,24 +121,47 @@ const quickStats = {
   delivery: '20 دقيقة'
 };
 
-const appData = {
-  featured,
-  offers,
-  notifications,
-  profile,
-  recentReviews,
-  stats: quickStats
-};
-
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/home', (req, res) => {
-  res.json({ success: true, data: appData });
+  res.json({ success: true, data: { featured, offers, notifications, profile, recentReviews, stats: quickStats } });
 });
 
 app.get('/api/profile', (req, res) => {
-  res.json({ success: true, data: profile });
+  res.json({ success: true, data: app.locals.currentUser || profile });
+});
+
+app.get('/api/auth/me', (req, res) => {
+  res.json({ success: true, data: app.locals.currentUser || null });
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'يرجى إدخال البريد الإلكتروني وكلمة المرور.' });
+  }
+
+  const name = email.split('@')[0] || 'ضيف';
+  app.locals.currentUser = {
+    name: name.replace(/[._-]/g, ' '),
+    email,
+    phone: '+966500000000'
+  };
+
+  res.json({ success: true, message: 'تم تسجيل الدخول بنجاح.', data: app.locals.currentUser });
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { name, email, password } = req.body || {};
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ success: false, message: 'يرجى تعبئة جميع الحقول.' });
+  }
+
+  app.locals.currentUser = { name, email, phone: '+966500000000' };
+  res.json({ success: true, message: 'تم إنشاء الحساب بنجاح.', data: app.locals.currentUser });
 });
 
 app.get('/api/reviews', (req, res) => {
@@ -155,6 +179,9 @@ app.post('/api/order', (req, res) => {
     return res.status(400).json({ success: false, message: 'يرجى إدخال اسم المنتج والكمية.' });
   }
 
+  const item = featured.find((entry) => entry.name === itemName) || { price: 45 };
+  const total = Number(quantity) * item.price;
+
   res.json({
     success: true,
     message: 'تم استلام الطلب بنجاح، سيتم تجهيز طلبك خلال دقائق.',
@@ -163,7 +190,7 @@ app.post('/api/order', (req, res) => {
       quantity,
       notes: notes || 'بدون ملاحظات',
       orderId: Math.floor(1000 + Math.random() * 9000),
-      total: Number(quantity) * 45
+      total
     }
   });
 });

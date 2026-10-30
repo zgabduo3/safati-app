@@ -83,6 +83,21 @@ button {
   line-height: 1.1;
 }
 
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-btn {
+  border: none;
+  background: linear-gradient(135deg, #fff3f5, #ffe4ea);
+  color: var(--primary-dark);
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
 .icon-btn {
   position: relative;
   width: 48px;
@@ -154,7 +169,9 @@ button {
 .chip,
 .nav-item,
 .close-btn,
-.icon-btn {
+.icon-btn,
+.tab-btn,
+.auth-btn {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -183,7 +200,9 @@ button {
 .chip:hover,
 .nav-item:hover,
 .icon-btn:hover,
-.close-btn:hover {
+.close-btn:hover,
+.tab-btn:hover,
+.auth-btn:hover {
   transform: translateY(-1px);
 }
 
@@ -451,8 +470,9 @@ button {
 
 .add-btn,
 .review-btn,
-.favorite-btn {
-  flex: 1;
+.favorite-btn,
+.detail-btn,
+.qty-btn {
   border: none;
   border-radius: 12px;
   padding: 10px 8px;
@@ -472,6 +492,13 @@ button {
 .favorite-btn {
   background: #fff8e8;
   color: #b67800;
+}
+
+.detail-btn {
+  width: 100%;
+  background: #fff1f3;
+  color: var(--primary-dark);
+  margin-top: 10px;
 }
 
 .reviews-list {
@@ -562,24 +589,41 @@ button {
   font-size: 0.85rem;
 }
 
-.notification-panel {
+.notification-panel,
+.cart-drawer,
+.modal {
   position: fixed;
-  inset: 0 0 auto 0;
   background: rgba(255,255,255,0.96);
   backdrop-filter: blur(8px);
+  box-shadow: 0 18px 32px rgba(120, 60, 46, 0.12);
+  z-index: 15;
+}
+
+.notification-panel {
+  inset: 0 0 auto 0;
   border-radius: 0 0 32px 32px;
   padding: 18px 18px 36px;
-  box-shadow: 0 18px 32px rgba(120, 60, 46, 0.12);
   transform: translateY(0);
   transition: transform 0.25s ease;
-  z-index: 10;
 }
 
-.notification-panel.hidden {
-  transform: translateY(-120%);
+.notification-panel.hidden,
+.cart-drawer.hidden,
+.modal.hidden {
+  display: none;
 }
 
-.panel-header {
+.cart-drawer {
+  inset: auto 0 92px 0;
+  border-radius: 28px 28px 0 0;
+  padding: 18px 18px 22px;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.drawer-header,
+.panel-header,
+.modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -594,24 +638,28 @@ button {
   height: 36px;
 }
 
-.notification-list {
+.notification-list,
+.cart-items {
   display: grid;
   gap: 10px;
 }
 
-.notification-item {
+.notification-item,
+.cart-item {
   background: #fff9f8;
   border: 1px solid var(--stroke);
   border-radius: 18px;
   padding: 12px 14px;
 }
 
-.notification-item strong {
+.notification-item strong,
+.cart-item strong {
   display: block;
   font-size: 0.95rem;
 }
 
-.notification-item p {
+.notification-item p,
+.cart-item p {
   color: var(--muted);
   font-size: 0.8rem;
   margin-top: 6px;
@@ -621,6 +669,105 @@ button {
   display: block;
   margin-top: 6px;
   color: #9c7b73;
+}
+
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  border-top: 1px solid var(--stroke);
+  padding-top: 20px;
+}
+
+.cart-summary strong {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--primary-dark);
+}
+
+.modal {
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(17, 8, 8, 0.45);
+  padding: 16px;
+}
+
+.modal-box {
+  width: min(100%, 360px);
+  background: white;
+  border-radius: 26px;
+  padding: 18px;
+  box-shadow: 0 24px 40px rgba(34, 18, 17, 0.18);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab-btn {
+  border: none;
+  background: #fff2f3;
+  color: var(--muted);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--primary), #ff8d79);
+  color: white;
+}
+
+.auth-form {
+  display: none;
+  gap: 12px;
+}
+
+.auth-form.active {
+  display: grid;
+}
+
+.auth-form input {
+  width: 100%;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  background: #fffaf9;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.full {
+  width: 100%;
+}
+
+.detail-box {
+  width: min(100%, 380px);
+}
+
+.detail-image {
+  width: 100%;
+  height: 220px;
+  border-radius: 18px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 12px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.detail-actions .primary-btn,
+.detail-actions .secondary-btn {
+  flex: 1;
 }
 
 .bottom-bar {
