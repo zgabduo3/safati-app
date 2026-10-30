@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>صفاتي | خدمات الحلويات</title>
+    <meta name="description" content="تطبيق عربي عصري لخدمات الحلويات، التقييمات، الطلبات، والإشعارات." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="logo">ص</div>
+          <div>
+            <p class="brand-subtitle">خدمات الحلويات</p>
+            <h1>صفاتي</h1>
+          </div>
+        </div>
+        <button class="icon-btn" id="notifyButton" aria-label="الإشعارات">
+          🔔
+          <span id="notificationCount">3</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="hero-card">
+          <div class="hero-text">
+            <span class="pill">توصيل سريع</span>
+            <h2>حلويات عربية فاخرة من ذوقك</h2>
+            <p>استمتع بتجربة تسليم أنيقة وممتعة مع أفضل المذاقات وأرخص الأسعار.</p>
+            <div class="hero-actions">
+              <button class="primary-btn" id="exploreBtn">تصفح الآن</button>
+              <button class="secondary-btn">حجز سريـع</button>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="cake-card">
+              <div class="cake-badge">مميز</div>
+              <div class="cake-illustration">🍰</div>
+              <div class="cake-meta">
+                <strong>بوظة الممكلة</strong>
+                <span>⭐ 4.9</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="search-panel">
+          <div class="search-box">
+            <span>🔍</span>
+            <input id="searchInput" type="text" placeholder="ابحث عن حلوياتك المفضلة..." />
+          </div>
+        </section>
+
+        <section class="offers-section">
+          <div class="section-heading">
+            <h3>عروض اليوم</h3>
+            <a href="#">المزيد</a>
+          </div>
+          <div id="offersList" class="offers-list"></div>
+        </section>
+
+        <section class="categories">
+          <button class="chip active">الكل</button>
+          <button class="chip">حلويات عربية</button>
+          <button class="chip">كيكات</button>
+          <button class="chip">مخبوزات</button>
+        </section>
+
+        <section class="products-section">
+          <div class="section-heading">
+            <h3>الأكثر طلبًا</h3>
+            <a href="#">عرض الكل</a>
+          </div>
+          <div id="productList" class="product-grid"></div>
+        </section>
+
+        <section class="info-panel">
+          <div class="mini-card">
+            <span>🚚</span>
+            <div>
+              <strong>توصيل سريع</strong>
+              <small>خلال 20 دقيقة</small>
+            </div>
+          </div>
+          <div class="mini-card accent">
+            <span>⭐</span>
+            <div>
+              <strong>تقييمات عالية</strong>
+              <small>4.9 من 5</small>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside id="notificationPanel" class="notification-panel hidden">
+        <div class="panel-header">
+          <h4>الإشعارات</h4>
+          <button class="close-btn" id="closeNotification">✕</button>
+        </div>
+        <div id="notificationList" class="notification-list"></div>
+      </aside>
+
+      <div class="bottom-bar">
+        <button class="nav-item active">🏠</button>
+        <button class="nav-item">🛒</button>
+        <button class="nav-item">❤</button>
+        <button class="nav-item">👤</button>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="/script.js"></script>
+  </body>
+</html>

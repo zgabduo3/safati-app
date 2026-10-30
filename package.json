@@ -1,0 +1,25 @@
+{
+  "name": "safati-app",
+  "version": "1.0.0",
+  "description": "Modern Arabic dessert service app with ratings, notifications, and an engaging mobile-first experience.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "dessert",
+    "services",
+    "arabic",
+    "node",
+    "express"
+  ],
+  "author": "Copilot",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.19"
+  }
+}

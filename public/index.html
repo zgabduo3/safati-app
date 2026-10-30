@@ -1,0 +1,162 @@
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const services = [
+  {
+    id: 1,
+    name: 'بوظة الممكلة',
+    category: 'حلويات عربية',
+    price: 45,
+    rating: 4.9,
+    reviews: 128,
+    badge: 'الأكثر طلبًا',
+    image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80',
+    description: 'مزيج فاخـر من الحليب والسكر والمهلبية مع لمسة عربية كلاسيكية.',
+    prepTime: '15 دقيقة',
+    spicyLevel: 'خفيف'
+  },
+  {
+    id: 2,
+    name: 'كيكة التوت',
+    category: 'كيكات',
+    price: 60,
+    rating: 4.8,
+    reviews: 94,
+    badge: 'جديد',
+    image: 'https://images.unsplash.com/photo-1559620192-032c4bc4674e?auto=format&fit=crop&w=900&q=80',
+    description: 'كيكة ناعمة بقاعدة الكراميل وت topping من التوت الطازج.',
+    prepTime: '20 دقيقة',
+    spicyLevel: 'ممتاز'
+  },
+  {
+    id: 3,
+    name: 'مكسور البندق',
+    category: 'حلويات ساخنة',
+    price: 38,
+    rating: 4.7,
+    reviews: 76,
+    badge: 'مميز',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=80',
+    description: 'حلوى هشة مع مزيج من البندق والمكسرات والكاكاو.',
+    prepTime: '12 دقيقة',
+    spicyLevel: 'مناسب للجميع'
+  },
+  {
+    id: 4,
+    name: 'بسبوسة ا��موز',
+    category: 'مخبوزات',
+    price: 52,
+    rating: 4.9,
+    reviews: 142,
+    badge: 'عرض اليوم',
+    image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80',
+    description: 'بسبوسة طرية مع قوام ناعم ونكهة الموز الحلوة.',
+    prepTime: '18 دقيقة',
+    spicyLevel: 'لطيف'
+  }
+];
+
+const offers = [
+  {
+    id: 1,
+    title: 'عرض العائلة',
+    text: 'خصم 25% على طلب 4 قطع أو أكثر',
+    accent: 'pink'
+  },
+  {
+    id: 2,
+    title: 'مميز اليوم',
+    text: 'شحن مجاني داخل المدينة',
+    accent: 'gold'
+  },
+  {
+    id: 3,
+    title: 'تقييمات مميزة',
+    text: 'أكثر من 5,000 عميل راضٍ',
+    accent: 'purple'
+  }
+];
+
+const notifications = [
+  {
+    id: 1,
+    title: 'تم تجهيز طلبك',
+    detail: 'الطلب رقم 2045 جاهز للتسليم خلال 20 دقيقة.',
+    time: 'منذ 5 دقائق'
+  },
+  {
+    id: 2,
+    title: 'عرض خاص لك',
+    detail: 'خصم إضافي 15% على الكيكة اليوم.',
+    time: 'منذ 25 دقيقة'
+  },
+  {
+    id: 3,
+    title: 'تم إضافة تقييم جديد',
+    detail: 'تم تقييم منتج كيك التوت بـ 5 نجوم.',
+    time: 'منذ ساعة'
+  }
+];
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/api/services', (req, res) => {
+  res.json({ success: true, data: services });
+});
+
+app.get('/api/offers', (req, res) => {
+  res.json({ success: true, data: offers });
+});
+
+app.get('/api/notifications', (req, res) => {
+  res.json({ success: true, data: notifications });
+});
+
+app.post('/api/order', (req, res) => {
+  const { itemName, quantity, notes } = req.body;
+
+  if (!itemName || !quantity) {
+    return res.status(400).json({ success: false, message: 'يرجى إدخال اسم المنتج والكمية.' });
+  }
+
+  res.json({
+    success: true,
+    message: 'تم استلام الطلب بنجاح، سيتم تجهيز طلبك خلال دقائق.',
+    order: {
+      itemName,
+      quantity,
+      notes: notes || 'بدون ملاحظات',
+      orderId: Math.floor(1000 + Math.random() * 9000)
+    }
+  });
+});
+
+app.post('/api/review', (req, res) => {
+  const { itemName, rating, comment } = req.body;
+
+  if (!itemName || !rating) {
+    return res.status(400).json({ success: false, message: 'يرجى إدخال المنتج والتقييم.' });
+  }
+
+  res.json({
+    success: true,
+    message: 'شكرًا لك! تم حفظ تقييمك بنجاح.',
+    review: {
+      itemName,
+      rating,
+      comment: comment || 'تقييم من عميل سعيد.'
+    }
+  });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Safati app running on http://localhost:${PORT}`);
+});
